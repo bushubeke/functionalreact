@@ -6,8 +6,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('tailwind-scrollbar'),
-    require('@tailwindcss/typography'),
+    
     require('@tailwindcss/forms'),
   ],
 }
