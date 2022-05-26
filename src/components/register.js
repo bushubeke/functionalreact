@@ -1,7 +1,13 @@
 // eslint-disable-next-line
 import {  useDispatch } from 'react-redux';
 import { useState  } from 'react';
+
+import { userslist } from '../appreducer';
+
+
+var axios=require('axios')
 export default function AddEmployeeForm({onclose}) {
+  
   const [values, setValues] = useState({
     Name: '',
     DateofBirth: '',
@@ -12,9 +18,27 @@ export default function AddEmployeeForm({onclose}) {
   const dispatch = useDispatch()
   const onSubmit = (event) => {
     event.preventDefault();
-    // dispatch(login());
-    console.log("submission prevented");
     console.log(values)
+   
+    const headers = {
+      'Content-Type': 'application/json',
+      
+    }
+    
+    axios.post('https://bushu-mongose.herokuapp.com/employee/', values, {
+        headers: headers
+      })
+      .then((response) => {
+       onclose()
+       dispatch(userslist())
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+
+    
   };
 
 // ###################################

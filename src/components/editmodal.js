@@ -1,6 +1,12 @@
 import {  useDispatch } from 'react-redux';
 import {  useState  } from 'react';
+import { userslist } from '../appreducer';
+
+
 import moment from 'moment';
+
+
+var axios=require('axios')
 export default function UpdateEmployeeForm({onclose, prevalues}) {
   const [values, setValues] = useState(prevalues);
   
@@ -8,9 +14,23 @@ export default function UpdateEmployeeForm({onclose, prevalues}) {
   const dispatch = useDispatch()
   const onSubmit = (event) => {
     event.preventDefault();
-    // dispatch(login());
-    console.log("submission prevented");
-    console.log(values)
+    const headers = {
+      'Content-Type': 'application/json',
+      
+    }
+    
+    axios.put('https://bushu-mongose.herokuapp.com/employee/', values, {
+        headers: headers
+      })
+      .then((response) => {
+       onclose()
+       dispatch(userslist())
+
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
   };
 
 // ###################################

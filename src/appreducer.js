@@ -1,64 +1,60 @@
-import { createSlice } from '@reduxjs/toolkit'
-const axios = require('axios');
-export const userReducer = createSlice({
-  name: 'useradminflow',
-  initialState: {
-    employees :[] ,
+import { createSlice,createAsyncThunk } from '@reduxjs/toolkit'
 
-  },
+
+// ###########################################
+//  fetching thunk
+export const userslist = createAsyncThunk(
+  'get/getPosts',
+  async () => {
+    const res = await fetch('https://bushu-mongose.herokuapp.com/employee').then(
+    (data) => data.json()
+  )
+  return res
+  })
+
+ 
+ 
+
+
+// ###########################################
+
+//############################################
+ // eslint-disable-next-line
+
+// ###########################################
+export const employeeSlice = createSlice({
+  name: 'employee',
+  initialState: {employees :[] ,loading : true},
   reducers: {
-    getemployees: (state) => {
-      
-     
-      console.log("this path is working fine")
-      axios({
-        method: 'get',
-        headers: { 
-          
-          'Access-Control-Allow-Origin' : '*',
-          'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        },
-        
-        url: 'https://bushu-mongose.herokuapp.com/employee',
-              })
-        .then(function (response) {
-          console.log(response.data)
-          state.employees=response.data;
-          // response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
-        });
-        // axios.get('https://bushu-mongose.herokuapp.com/employee')
-        //     .then(function (response) {
-        //       // handle success
-        //       console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //       // handle error
-        //       console.log(error);
-        //     })
-        //     .then(function () {
-        //       // always executed
-        //     });
-    },
-    updateemployees: (state) => {
-      
-      state.loggedin=false;
-      console.log("this path is working fine")
-    },
-    deleteemployees: (state) => {
-      
-      state.loggedin=false;
-      console.log("this path is working fine")
-    },
-    createemployees: (state) => {
-      
-      state.loggedin=false;
-      console.log("this path is working fine")
-    }
+    getemployees: (state)=>{
+      //  console.log(state.loading)
+        // console.log(state.employees)
+      },
+
+    
   
   },
+  extraReducers: {
+    [userslist.pending]: (state) => {
+      state.loading = true
+    },
+    [userslist.fulfilled]: (state, { payload }) => {
+      state.loading = false
+      // console.log(payload)
+      state.employees = payload
+    },
+    [userslist.rejected]: (state) => {
+      state.loading = false
+    },
+   
+
+  }
+ 
 })
 
 // Action creators are generated for each case reducer function
-export const { getemployees,updateemployees,deleteemployees,createemployees } = userReducer.actions;
+export const { getemployees} = employeeSlice.actions;
 export const selectUser = (state) => state.reducer.employees;
-export default userReducer.reducer
+export const selectLoading=(state) => state.reducer.loading;
+
+export default employeeSlice.reducer;

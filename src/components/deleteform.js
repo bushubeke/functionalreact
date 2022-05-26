@@ -1,6 +1,12 @@
 import {  useDispatch } from 'react-redux';
 import { useState  } from 'react';
 
+import {  userslist } from '../appreducer';
+
+
+var axios=require('axios')
+
+
 export default function DeleteEmployeeForm({onclose, prevalues}) {
     
   // eslint-disable-next-line
@@ -8,12 +14,35 @@ export default function DeleteEmployeeForm({onclose, prevalues}) {
   
   // eslint-disable-next-line
   const dispatch = useDispatch()
-  const onSubmit = (event) => {
+  function onSubmit(event) {
     event.preventDefault();
-    // dispatch(login());
-    console.log("submission prevented");
-    console.log(values)
+    
+    let url= 'https://bushu-mongose.herokuapp.com/employee/'+values._id.toString()
+    const headers = {
+      'Content-Type': 'application/json',
+      
+    }
+    
+    axios.delete(url, {}, {
+        headers: headers
+      })
+      .then((response) => {
+       onclose()
+       dispatch(userslist())
+
+      })
+      .catch((error) => {
+        console.log(error)
+        onclose()
+        dispatch(userslist())
+ 
+      })
+
   };
+  
+
+    // dispatch(deletelist(values._id.toString()))
+    
 
 // ###################################
 
