@@ -19,7 +19,7 @@ export const userReducer = createSlice({
           'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
         },
         
-        url: 'https://bushu-mongose.herokuapp.com/employee',
+        url: 'http://localhost:3001/employee',
               })
         .then(function (response) {
           console.log(response.data)
